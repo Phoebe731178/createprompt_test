@@ -114,17 +114,21 @@ if mode == "首页":
     )
     st.subheader("**To start🤗**")
     st.write(
-        "请修改以下路径为你所存放你自己的数据集根目录的地方:"
+        "1.请修改util.py中filter_datasets()的路径为你所存放你自己的数据集根目录的地方:"
+    )
+    st.code("dataset_file_path = 你自己的数据集存放路径")
+    st.write(
+        "2.请修改app.py中的以下路径为你所存放你自己的数据集根目录的地方:"
     )
     st.code("configs = get_dataset_confs(数据集存放路径/%s % (dataset_key))")
-    st.write("例如：我的数据集ekar_Chinese放在路径：C:/Users/xx/Desktop/myPromptSource/createpromptsource/promptsource/datasets/ekar_Chinese 下")
+    st.write("例如：我的数据集ekar_Chinese放在路径：/data/xx/test_github/createprompt_test/promptsource/datasets/ekar_Chinese 下")
     st.write("那么就需要对应的改为：")
-    st.code("configs = get_dataset_confs('C:/Users/xx/Desktop/myPromptSource/createpromptsource/promptsource/datasets/%s' % (dataset_key))")
+    st.code("configs = get_dataset_confs('/data/xx/test_github/createprompt_test/promptsource/datasets/%s' % (dataset_key))")
     st.write("并且修改缓存目录")
 
     st.subheader("**To use🤗**")
     st.write("选择**创建模板**模式开始创建属于你的提示，你需要对jinja模板语言进行熟悉。")
-    st.write("选择**数据集预览**模式对添加了模板的数据集进行预览，并进行下载")
+    st.write("选择**数据集预览**模式对添加了模板的数据集进行预览")
 
 else:
     assert mode in ["数据集预览", "创建模板"], ValueError(
@@ -157,7 +161,7 @@ else:
         #
         # Check for subconfigurations (i.e. subsets)
         #
-        configs = get_dataset_confs("C:/Users/14190/Desktop/myPromptSource/createpromptsource/promptsource/datasets/%s" % (dataset_key))
+        configs = get_dataset_confs("/data/xx/test_github/createprompt_test/promptsource/datasets/%s" % (dataset_key))
         print(configs)
         conf_option = None
         if len(configs) > 0:
@@ -176,10 +180,7 @@ else:
             st.error(
                 f"您自己的数据集需要手动放置"
                 f"这适用于  {dataset_key}{f'/{subset_name}' if subset_name is not None else ''}. "
-                f"\n\n请将原始数据集放到 `C:/Users/14190/Desktop/myPromptSource/createpromptsource/promptsource/datasets/{dataset_key}{f'/{subset_name}' if subset_name is not None else ''}`. "
-                f"\n\n你可以选择另一个缓存目录，通过覆盖 `PROMPTSOURCE_MANUAL_DATASET_DIR` 环境 "
-                f"变量，并将原始数据集下载到 `$PROMPTSOURCE_MANUAL_DATASET_DIR/{dataset_key}{f'/{subset_name}' if subset_name is not None else ''}`"
-                f"\n\n原来的错误：\n{str(e)}"
+                f"\n\n请将原始数据集放到 `/data/xx/test_github/createprompt_test/promptsource/datasets/{dataset_key}{f'/{subset_name}' if subset_name is not None else ''}`. "
             )
             st.stop()
 
@@ -254,23 +255,6 @@ else:
         # If we have a custom dataset change the source link to the hub
         split_dataset_key = dataset_key.split("/")
         possible_user = split_dataset_key[0]
-        #if len(split_dataset_key) > 1 and possible_user in INCLUDED_USERS:
-            #source_link = "https://huggingface.co/datasets/%s/blob/main/%s.py" % (
-                #dataset_key,
-                #split_dataset_key[-1],
-            #)
-        #else:
-            #source_link = "https://github.com/huggingface/datasets/blob/master/datasets/%s/%s.py" % (
-                #dataset_key,
-                #dataset_key,
-            #)
-
-        #st.markdown("*Homepage*: " + dataset.info.homepage + "\n\n*Dataset*: " + source_link)
-        #md = """
-        #%s
-        #""" % (
-        #    dataset.info.description.replace("\\", "") if dataset_key else ""
-        #)
 
         #
         # Body of the app: display prompted examples in mode `Prompted dataset viewer`

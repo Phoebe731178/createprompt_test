@@ -6,7 +6,7 @@ import requests
 
 from templates import INCLUDED_USERS
 
-DEFAULT_PROMPTSOURCE_CACHE_HOME = "C:/Users/14190/Desktop/myPromptSource/createpromptsource/.cache/MaMTL/datasets"
+DEFAULT_PROMPTSOURCE_CACHE_HOME = ".cache/"
 
 
 def removeHyphen(example):
@@ -56,9 +56,6 @@ def get_dataset(path, conf=None):
 
 
 def load_dataset(dataset_name, subset_name):
-    #try:
-        #return datasets.load_dataset(dataset_name, subset_name)
-    #except datasets.builder.ManualDownloadError:
     cache_root_dir = (
         os.environ["PROMPTSOURCE_MANUAL_DATASET_DIR"]
         if "PROMPTSOURCE_MANUAL_DATASET_DIR" in os.environ
@@ -76,33 +73,6 @@ def load_dataset(dataset_name, subset_name):
         data_dir=data_dir,
     )
 
-"""
-def load_dataset(dataset_name, subset_name):
-    #load(name='ted_hrlr_translate/pt_to_en',
-         #data_dir = "C:/Users/14190/Desktop/python_project_pycharm/myPromptSource/.cache/MaMTL/datasets",
-         #download=False)
-    #print(dataset_name)
-    #try:
-        #print("C:/Users/14190/Desktop/python_project_pycharm/myPromptSource/.cache/MaMTL/datasets/%s" % (dataset_name))
-        #return load.load_dataset(dataset_name, subset_name, "C:/Users/14190/Desktop/python_project_pycharm/myPromptSource/.cache/MaMTL/datasets")
-    #except ManualDownloadError:
-    cache_root_dir = (
-        os.environ["PROMPTSOURCE_MANUAL_DATASET_DIR"]
-        if "PROMPTSOURCE_MANUAL_DATASET_DIR" in os.environ
-        else DEFAULT_PROMPTSOURCE_CACHE_HOME
-    )
-    data_dir = (
-        f"{cache_root_dir}/{dataset_name}"
-        if subset_name is None
-        else f"{cache_root_dir}/{dataset_name}/{subset_name}"
-    )
-    return datasets.load.load_dataset(
-        #dataset_name,
-        "C:/Users/14190/Desktop/myPromptSource/promptsource/.cache/MaMTL/datasets/%s" % (dataset_name),
-        subset_name,
-        data_dir=data_dir,
-    )
-"""
 
 def get_dataset_confs(path):
     "Get the list of confs for a dataset."
@@ -136,49 +106,20 @@ def render_features(features):
 #
 
 
-def filter_english_datasets():
-    """
-    Filter English datasets based on language tags in metadata.
+def filter_datasets():
 
-    Also includes the datasets of any users listed in INCLUDED_USERS
-    """
     chinese_datasets = []
 
-    dataset_file_path = "C:/Users/14190/Desktop/myPromptSource/promptsource/promptsource/datasets"
+    dataset_file_path = "/data/xx/test_github/createprompt_test/promptsource/datasets"
     dataset_file_name = os.listdir(dataset_file_path)
     for dataset_name in dataset_file_name:
         chinese_datasets.append(dataset_name)
 
-    """
-    response = requests.get("https://huggingface.co/api/datasets?full=true")
-    tags = response.json()
-
-    for dataset in tags:
-        dataset_name = dataset["id"]
-
-        is_community_dataset = "/" in dataset_name
-        if is_community_dataset:
-            user = dataset_name.split("/")[0]
-            if user in INCLUDED_USERS:
-                english_datasets.append(dataset_name)
-            continue
-
-        if "cardData" not in dataset:
-            continue
-        metadata = dataset["cardData"]
-
-        if "languages" not in metadata:
-            continue
-        languages = metadata["languages"]
-
-        if "en" in languages or "en-US" in languages:
-            english_datasets.append(dataset_name)
-    """
     return sorted(chinese_datasets)
 
 
 def list_datasets():
     """Get all the datasets to work with."""
-    dataset_list = filter_english_datasets()
+    dataset_list = filter_datasets()
     dataset_list.sort(key=lambda x: x.lower())
     return dataset_list
